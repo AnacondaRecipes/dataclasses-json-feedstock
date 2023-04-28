@@ -29,6 +29,10 @@ requirements:
 test:
   imports:
     - dataclasses_json
+  requires:
+    - pip
+  commands:
+    - pip check
 
 about:
   home: https://github.com/lidatong/dataclasses-json
@@ -36,6 +40,9 @@ about:
   license_family: MIT
   license_file: LICENSE
   summary: Easily serialize dataclasses to and from JSON
+  description: |
+    This library provides a simple API for encoding and decoding dataclasses to and from JSON.
+    It is recursive, and supports arbitrary collections, datetime, UUID, and decimal objects.
   doc_url: https://lidatong.github.io/dataclasses-json/
   dev_url: https://github.com/lidatong/dataclasses-json
 
