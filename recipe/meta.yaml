@@ -1,5 +1,5 @@
 {% set name = "dataclasses-json" %}
-{% set version = "0.5.7" %}
+{% set version = "0.6.5" %}
 
 package:
   name: {{ name|lower }}
@@ -7,24 +7,23 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: c2c11bc8214fbf709ffc369d11446ff6945254a7f09128154a7620613d8fda90
+  sha256: 1c287594d9fcea72dc42d6d3836cf14848c2dc5ce88f65ed61b36b57f515fe26
 
 build:
   number: 0
-  skip: True # [py<36]
+  skip: True # [py<37]
   script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-build-isolation -vv
 
 requirements:
   host:
     - pip
-    - wheel
-    - python
-    - setuptools 66.0
+    - poetry-core >=1.2.0
+    - poetry-dynamic-versioning
+    - pip
   run:
     - python
-    - marshmallow >=3.3.0,<4.0.0
-    - marshmallow-enum >=1.5.1,<2.0.0
-    - typing_inspect >=0.4.0
+    - marshmallow >=3.18.0,<4.0.0
+    - typing_inspect >=0.4.0,<1
 
 test:
   imports:
