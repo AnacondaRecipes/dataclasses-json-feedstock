@@ -1,37 +1,51 @@
 {% set name = "dataclasses-json" %}
-{% set version = "0.6.5" %}
+{% set version = "0.6.7" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/dataclasses_json-{{ version }}.tar.gz
-  sha256: 1c287594d9fcea72dc42d6d3836cf14848c2dc5ce88f65ed61b36b57f515fe26
+  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace('-', '_')}}-{{ version }}.tar.gz
+    sha256: b6b3e528266ea45b9535223bc53ca645f5208833c29229e847b3f26a1cc55fc0
+  - url: https://github.com/lidatong/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
+    sha256: 33518eac8d2dcf6a46c97dace4411e591a2443d3e3a1bfd87c51ee032f65d9e0
+    folder: gh_src
 
 build:
   number: 0
-  skip: True # [py<37]
   script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-build-isolation -vv
+  skip: True # [py<37]
 
 requirements:
   host:
     - python
+    - pip
     - poetry-core >=1.2.0
     - poetry-dynamic-versioning
-    - pip
   run:
     - python
     - marshmallow >=3.18.0,<4.0.0
     - typing_inspect >=0.4.0,<1
 
+
+# MyPy used:
+{% set ignore_tests = " --ignore=gh_src/tests/test_annotations.py" %}
+
 test:
+  source_files:
+    - gh_src/tests
   imports:
     - dataclasses_json
-  requires:
-    - pip
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest -v {{ ignore_tests }} gh_src/tests
+  requires:
+    - pip
+    - pytest >=7.1,<8
+    - hypothesis >=6.77,<7.0
+    - simplejson >=3.19.1,<4
 
 about:
   home: https://github.com/lidatong/dataclasses-json
@@ -42,7 +56,7 @@ about:
   description: |
     This library provides a simple API for encoding and decoding dataclasses to and from JSON.
     It is recursive, and supports arbitrary collections, datetime, UUID, and decimal objects.
-  doc_url: https://lidatong.github.io/dataclasses-json/
+  doc_url: https://lidatong.github.io/dataclasses-json
   dev_url: https://github.com/lidatong/dataclasses-json
 
 extra:
