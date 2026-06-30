@@ -31,6 +31,11 @@ requirements:
 
 # MyPy used:
 {% set ignore_tests = " --ignore=gh_src/tests/test_annotations.py" %}
+# dataclasses_json calls get_type_hints(cls, ...) in undefined.py::_get_catch_all_field passing a dataclass instance instead of its class;
+# Python 3.14's stricter annotationlib.get_annotations now rejects instances without their own __annotations__,
+# so the call raises TypeError instead of silently working as it did on older Python.
+{% set deselect_tests = " --deselect=gh_src/tests/test_undefined_parameters.py::test_undefined_parameters_catch_all_schema_dump" %}
+{% set deselect_tests = deselect_tests + " --deselect=gh_src/tests/test_undefined_parameters.py::test_undefined_parameters_catch_all_schema_roundtrip" %}
 
 test:
   source_files:
