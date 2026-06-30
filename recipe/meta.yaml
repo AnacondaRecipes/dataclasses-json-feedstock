@@ -45,7 +45,7 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -v {{ ignore_tests }} gh_src/tests
+    - pytest -v {{ ignore_tests }} {{ deselect_tests }} gh_src/tests
   requires:
     - pip
     - pytest >=7.1,<8
